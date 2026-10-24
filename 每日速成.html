@@ -1,0 +1,1286 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="零基礎學速成中文打字：新手課程、初中高三級，以及香港生活字句無限模式。">
+<meta property="og:title" content="速成字牌">
+<meta property="og:description" content="麻雀牌打字遊戲，零基礎學識速成。句子全部係香港人日常用嘅。">
+<meta name="theme-color" content="#143e30">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{box-sizing:border-box}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>速成字牌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  /* Layout: one-screen game table — green felt play area on top, a keyboard of ivory mahjong tiles below */
+  --felt:#1d5642; --felt-2:#143e30; --felt-hi:#2a6c54;
+  --ivory:#f8f2df; --ivory-2:#e9dfc1; --jade:#2f8b5b; --jade-dk:#1d6441;
+  --ink:#211d16; --ink-soft:#6a6252;
+  --red:#b3271d; --blue:#22489a; --green:#16623a;
+  --gold:#e8bd52; --on-felt:#eef4ef; --on-felt-soft:#a8c7b7; --veil:rgba(255,255,255,.08); --veil-line:rgba(255,255,255,.18);
+  --g0:#d6981a; --g1:#3b7fc6; --g2:#d4573c; --g3:#8b5bc4;
+  --f-tile:"LXGW WenKai TC","Kaiti TC","STKaiti","BiauKai","DFKai-SB","KaiTi",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{height:100%;background:var(--felt-2)}
+body{height:100%;margin:0;color:var(--on-felt);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  background:radial-gradient(ellipse 120% 80% at 50% 25%,var(--felt-hi) 0%,var(--felt) 45%,var(--felt-2) 100%);
+  -webkit-tap-highlight-color:transparent;overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column;max-width:600px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.hl{color:var(--gold);font-weight:700}
+.small{font-size:13px;color:var(--on-felt-soft)}
+
+/* ---------- tiles ---------- */
+.tile{width:62px;height:82px;border-radius:9px;flex:none;
+  background:linear-gradient(175deg,var(--ivory) 0%,var(--ivory) 60%,var(--ivory-2) 100%);
+  box-shadow:0 6px 0 var(--jade),0 7px 0 var(--jade-dk),0 14px 18px rgba(0,0,0,.35);
+  display:grid;place-items:center;font-family:var(--f-tile);font-weight:700;font-size:46px;line-height:1;color:var(--tile-ink,var(--ink));
+  transition:opacity .2s,transform .2s}
+.tile.sm{width:50px;height:66px;font-size:36px;border-radius:8px;box-shadow:0 5px 0 var(--jade),0 6px 0 var(--jade-dk),0 10px 14px rgba(0,0,0,.3)}
+.tile.xs{width:40px;height:54px;font-size:28px;border-radius:7px;box-shadow:0 4px 0 var(--jade),0 5px 0 var(--jade-dk),0 8px 10px rgba(0,0,0,.25)}
+.tile.xxs{width:35px;height:48px;font-size:24px;border-radius:6px;box-shadow:0 4px 0 var(--jade),0 5px 0 var(--jade-dk),0 8px 10px rgba(0,0,0,.25)}
+
+/* ---------- shared blocks ---------- */
+.scroll{overflow-y:auto;padding-block:18px 28px;display:flex;flex-direction:column;gap:20px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.card{background:var(--veil);border:1px solid var(--veil-line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.sect-label{font-size:12px;letter-spacing:.18em;color:var(--on-felt-soft);font-weight:500}
+.btn{border:none;border-radius:11px;padding:11px 20px;font-weight:700;background:var(--gold);color:var(--ink);box-shadow:0 4px 0 #a9822a}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #a9822a}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.ghost{background:var(--veil);color:var(--on-felt);box-shadow:none;border:1px solid var(--veil-line)}
+.icon-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--veil-line);background:var(--veil);display:grid;place-items:center;font-size:14px;flex:none}
+.eq{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding-top:4px}
+.eq .op{font-size:22px;color:var(--on-felt-soft)}
+.eq .kc{display:flex;flex-direction:column;align-items:center;gap:8px}
+.eq .kc small{font-family:var(--f-num);font-size:13px;color:var(--gold);font-weight:600;min-height:1.3em}
+.rk{display:inline-flex;align-items:baseline;gap:5px;background:var(--ivory);color:var(--ink);border-radius:7px;padding:3px 9px 4px;box-shadow:0 3px 0 var(--jade-dk)}
+.rk b{font-family:var(--f-tile);font-size:20px;line-height:1.2}
+.rk small{font-family:var(--f-num);font-size:11px;color:var(--ink-soft)}
+.brow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+
+/* ---------- menu ---------- */
+.hero{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-top:6px}
+.hero-tiles{display:flex;gap:8px}
+.hero-tiles .tile:nth-child(1){transform:rotate(-5deg) translateY(4px);--tile-ink:var(--red)}
+.hero-tiles .tile:nth-child(2){transform:rotate(2deg);--tile-ink:var(--green)}
+.hero-tiles .tile:nth-child(3){transform:rotate(-2deg) translateY(2px);--tile-ink:var(--blue)}
+.hero-tiles .tile:nth-child(4){transform:rotate(4deg) translateY(5px);--tile-ink:var(--red)}
+.hero p{color:var(--on-felt-soft);font-size:14px}
+.course{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;text-align:left;border:none;border-radius:16px;padding:16px;
+  background:linear-gradient(160deg,#f3d47e,var(--gold));color:var(--ink);box-shadow:0 5px 0 #a9822a}
+.course:active{transform:translateY(3px);box-shadow:0 2px 0 #a9822a}
+.course h2{font-size:18px}
+.course p{font-size:13px;margin-top:2px;color:#4a3d1c}
+.course .prog{font-family:var(--f-num);font-size:12px;text-align:right;white-space:nowrap;color:#4a3d1c}
+.course .prog b{display:block;font-size:20px;color:var(--ink)}
+.levels{display:flex;flex-direction:column;gap:14px}
+.lvl{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;border:none;border-radius:14px;
+  padding:12px 14px 12px 12px;background:var(--ivory);color:var(--ink);box-shadow:0 5px 0 var(--jade),0 6px 0 var(--jade-dk);transition:transform .12s,box-shadow .12s}
+.lvl:hover{transform:translateY(-1px)}
+.lvl:active{transform:translateY(3px);box-shadow:0 2px 0 var(--jade),0 3px 0 var(--jade-dk)}
+.lvl .tile{box-shadow:none;border:2px solid var(--ivory-2);background:#fffaf0}
+.lvl h3{font-size:17px;font-weight:700}
+.lvl h3 span{font-size:13px;font-weight:500;color:var(--ink-soft);margin-left:6px}
+.lvl p{margin-top:2px;font-size:13px;color:var(--ink-soft);line-height:1.5}
+.lvl .best{font-family:var(--f-num);font-size:12px;color:var(--ink-soft);text-align:right;white-space:nowrap}
+.lvl .best b{display:block;font-size:17px;color:var(--ink)}
+details.roots{background:var(--veil);border:1px solid var(--veil-line);border-radius:14px;padding:4px 16px}
+details.roots summary{cursor:pointer;padding:10px 0;font-weight:700;font-size:15px;list-style:none;display:flex;justify-content:space-between}
+details.roots summary::-webkit-details-marker{display:none}
+details.roots summary::after{content:"＋";color:var(--gold)}
+details.roots[open] summary::after{content:"－"}
+.rgroups{display:grid;gap:14px;padding:4px 0 16px}
+.rg h4{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--on-felt-soft);display:flex;align-items:center;gap:8px}
+.rg h4 i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.rg-list{display:flex;flex-wrap:wrap;gap:6px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--on-felt-soft)}
+.toggle{background:var(--veil);border:1px solid var(--veil-line);border-radius:999px;padding:6px 14px;font-size:13px;flex:none}
+
+/* ---------- learn ---------- */
+.lesson-list{display:flex;flex-direction:column;gap:10px}
+.les{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--veil);border:1px solid var(--veil-line);border-radius:14px;padding:12px 14px}
+.les:hover{background:rgba(255,255,255,.12)}
+.les .no{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:var(--ivory);color:var(--ink);font-family:var(--f-num);font-weight:600}
+.les.done .no{background:var(--gold)}
+.les h3{font-size:16px}
+.les p{font-size:13px;color:var(--on-felt-soft);line-height:1.5}
+.les .st{font-size:12px;color:var(--on-felt-soft);white-space:nowrap}
+.les.done .st{color:var(--gold)}
+.top{display:flex;align-items:center;gap:10px;padding-block:12px 6px}
+.top h2{font-size:18px;flex:1;min-width:0}
+.player{flex:1;min-height:0;display:flex;flex-direction:column}
+.dots{display:flex;gap:4px;flex:none}
+.dots i{width:14px;height:4px;border-radius:2px;background:var(--veil-line)}
+.dots i.on{background:var(--gold)}
+.lp-body{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding-block:8px 12px;scrollbar-width:none}
+.lp-body::-webkit-scrollbar{display:none}
+.lp-body h3{font-size:20px;line-height:1.35}
+.lp-body > p{max-width:62ch}
+.lp-actions{display:flex;gap:10px;padding-block:6px 8px}
+.lp-actions .btn{flex:1}
+.mini-kb{display:flex;flex-direction:column;gap:4px;padding:10px 6px;background:rgba(0,0,0,.18);border-radius:12px}
+.mrow{display:flex;gap:3px;justify-content:center}
+.mk{flex:0 0 calc((100% - 27px)/10);background:var(--ivory);color:var(--ink);border-radius:5px;text-align:center;padding:2px 0 1px;box-shadow:0 2px 0 var(--jade-dk);border-top:3px solid transparent}
+.mk[data-g="0"]{border-top-color:var(--g0)}.mk[data-g="1"]{border-top-color:var(--g1)}.mk[data-g="2"]{border-top-color:var(--g2)}.mk[data-g="3"]{border-top-color:var(--g3)}
+.mk.off{opacity:.4}
+.mk b{display:block;font-family:var(--f-tile);font-size:16px;line-height:1.25}
+.mk small{display:block;font-family:var(--f-num);font-size:9px;color:var(--ink-soft);line-height:1.3}
+.grp{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}
+.grp i{width:10px;height:10px;border-radius:50%;margin-top:7px}
+.grp h4{margin:0;font-size:15px}
+.grp p{grid-column:2;font-size:13px;color:var(--on-felt-soft)}
+.grp .brow{grid-column:2;justify-content:flex-start}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.form{display:grid;grid-template-columns:44px 1fr;gap:2px 10px;align-items:center;background:var(--veil);border:1px solid var(--veil-line);border-radius:11px;padding:8px 10px}
+.form .sym{grid-row:span 2;font-family:var(--f-tile);font-size:32px;text-align:center;line-height:1}
+.form b{font-size:14px}
+.form b code{font-family:var(--f-num);color:var(--gold);margin-left:4px}
+.form small{font-size:12px;color:var(--on-felt-soft)}
+.rule{display:grid;grid-template-columns:5.5em 1fr;gap:10px;align-items:center}
+.rule .rn{font-weight:700;color:var(--gold);font-size:14px}
+.ex{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.ex .tile{box-shadow:0 3px 0 var(--jade),0 4px 0 var(--jade-dk)}
+.ex code{font-family:var(--f-num);color:var(--gold);font-weight:600}
+.keydemo{display:flex;gap:18px;justify-content:center;align-items:flex-end}
+.keydemo figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--on-felt-soft)}
+.kd{width:54px;height:54px;border-radius:8px;background:linear-gradient(var(--ivory),var(--ivory-2));box-shadow:0 4px 0 var(--jade),0 5px 0 var(--jade-dk);color:var(--ink);display:grid;place-items:center;position:relative}
+.kd b{font-family:var(--f-tile);font-size:24px}
+.kd small{position:absolute;left:5px;top:3px;font-family:var(--f-num);font-size:10px;color:var(--ink-soft)}
+.kd.en b{font-family:var(--f-num);font-size:20px}
+.howto{display:flex;flex-direction:column;gap:6px}
+.howto h4{margin:0;font-size:15px;display:flex;gap:8px;align-items:center}
+.howto ol{margin:0;padding-left:1.3em;font-size:14px;display:flex;flex-direction:column;gap:3px}
+.kbd{font-family:var(--f-num);font-size:12px;background:var(--ivory);color:var(--ink);border-radius:5px;padding:1px 6px;box-shadow:0 2px 0 var(--jade-dk);white-space:nowrap}
+.candbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;background:rgba(0,0,0,.2);border-radius:10px;padding:8px}
+.candbar .typed{font-family:var(--f-num);color:var(--gold);font-weight:600;margin-right:4px}
+.cand{background:var(--ivory);color:var(--ink);border:none;border-radius:8px;padding:5px 12px;font-family:var(--f-tile);font-size:22px;font-weight:700;box-shadow:0 3px 0 var(--jade-dk)}
+.cand small{font-family:var(--f-num);font-size:11px;color:var(--ink-soft);margin-right:4px;font-weight:500}
+.cand.static{cursor:default}
+.qhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.qhead h3{font-size:17px}
+.qhead span{font-family:var(--f-num);font-size:13px;color:var(--on-felt-soft)}
+.qprompt{display:flex;flex-direction:column;align-items:center;gap:12px;padding-block:6px;text-align:center}
+.qfeed{min-height:1.6em;text-align:center;font-size:14px;color:var(--on-felt-soft)}
+.qfeed.good{color:#bfe5b3}.qfeed.bad{color:#ffb4a6}
+
+/* ---------- setup ---------- */
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{border:1px solid var(--veil-line);background:var(--veil);border-radius:10px;padding:8px 14px;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--ivory);color:var(--ink);border-color:var(--ivory);font-weight:700;box-shadow:0 3px 0 var(--jade-dk)}
+.opt{display:flex;flex-direction:column;gap:10px}
+.opt .small{max-width:60ch}
+.btn.big{padding:14px 20px;font-size:17px}
+
+/* ---------- game ---------- */
+.hud{display:flex;align-items:center;gap:10px;padding-block:10px 8px;font-size:13px}
+.hud .lv{font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.hud .lv small{display:block;font-weight:400;color:var(--on-felt-soft);font-family:var(--f-num);font-size:11px;letter-spacing:0}
+.hud .sp{flex:1}
+.hearts{display:flex;gap:2px;font-size:17px;color:#ff8a78}
+.hearts .lost{color:rgba(255,255,255,.18)}
+.timer{font-family:var(--f-num);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;background:var(--veil);border:1px solid var(--veil-line);border-radius:8px;padding:2px 8px}
+.timer.low{color:#ffb4a6;border-color:#ffb4a6}
+.score{font-family:var(--f-num);font-weight:600;font-size:18px;font-variant-numeric:tabular-nums;min-width:4.2ch;text-align:right}
+.combo{font-family:var(--f-num);font-size:12px;color:var(--gold);min-width:5ch;text-align:right}
+.field{flex:1;min-height:170px;position:relative;overflow:hidden;border-radius:16px;
+  background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 6px),
+    radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.07),transparent 70%),
+    var(--felt-2);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 0 10px 30px rgba(0,0,0,.25)}
+.danger{position:absolute;left:0;right:0;bottom:16px;height:26%;background:linear-gradient(transparent,rgba(214,80,60,.14));pointer-events:none}
+.rail{position:absolute;left:0;right:0;bottom:0;height:16px;background:linear-gradient(#93592b,#6a3e1c);box-shadow:0 -2px 0 rgba(0,0,0,.25)}
+.tiles{position:absolute;left:0;right:0;top:12px;display:flex;justify-content:center;gap:7px;will-change:transform}
+.tile.now{outline:3px solid var(--gold);outline-offset:3px}
+.tile.done{opacity:.4;transform:translateY(5px) scale(.94)}
+.tiles.pop{animation:pop .42s ease-out forwards}
+.tiles.hit .tile{background:linear-gradient(#f6d7cf,#e7b8ac)}
+.tiles.shake{animation:shake .28s}
+@keyframes pop{to{transform:var(--ty) scale(1.2);opacity:0}}
+@keyframes shake{0%,100%{translate:0}25%{translate:-7px}75%{translate:7px}}
+.float{position:absolute;left:50%;font-family:var(--f-num);font-weight:600;font-size:20px;color:var(--gold);pointer-events:none;animation:rise .9s ease-out forwards;translate:-50% 0;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+@keyframes rise{to{transform:translateY(-46px);opacity:0}}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:rgba(10,30,22,.74);backdrop-filter:blur(2px);padding:20px}
+.overlay .box{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:330px}
+.overlay h2{font-size:22px;font-weight:700}
+.overlay p{color:var(--on-felt-soft);font-size:14px}
+.hint{min-height:92px;padding-block:10px 6px;display:flex;flex-direction:column;justify-content:center;gap:7px;font-size:14px}
+.hint .line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.big{font-family:var(--f-tile);font-size:24px;font-weight:700;color:var(--gold);line-height:1}
+.note{color:var(--on-felt-soft);font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--veil);border:1px solid var(--veil-line);border-radius:9px;padding:3px 10px 3px 8px;transition:background .15s}
+.chip em{font-style:normal;font-size:11px;color:var(--on-felt-soft)}
+.chip b{font-family:var(--f-tile);font-size:21px;line-height:1.25}
+.chip code{font-family:var(--f-num);font-size:13px;font-weight:600;color:var(--gold);min-width:1ch}
+.chip.ok{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.chip.ok em,.chip.ok code{color:var(--ink)}
+.chip.next{border-color:var(--gold)}
+.hint-btn{border:1px dashed var(--veil-line);background:transparent;border-radius:9px;padding:4px 12px;font-size:13px;color:var(--on-felt)}
+.answer{color:#ffb4a6}
+
+/* ---------- keyboard ---------- */
+.kb{display:flex;flex-direction:column;gap:7px;padding-block:6px 10px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.row{display:flex;gap:4px;justify-content:center}
+.key{flex:0 0 calc((100% - 36px)/10);height:50px;border:none;border-radius:7px;position:relative;padding:0;
+  background:linear-gradient(var(--ivory),var(--ivory-2));color:var(--ink);box-shadow:0 4px 0 var(--jade),0 5px 0 var(--jade-dk);
+  display:grid;place-items:center;transition:background .12s,transform .06s}
+.key .r{font-family:var(--f-tile);font-weight:700;font-size:20px;line-height:1}
+.key .l{position:absolute;left:4px;top:2px;font-family:var(--f-num);font-size:9.5px;color:var(--ink-soft)}
+.key::after{content:"";position:absolute;right:4px;top:5px;width:5px;height:5px;border-radius:50%;background:var(--gc,transparent)}
+.key[data-g="0"]{--gc:var(--g0)}.key[data-g="1"]{--gc:var(--g1)}.key[data-g="2"]{--gc:var(--g2)}.key[data-g="3"]{--gc:var(--g3)}
+.key:active{transform:translateY(3px);box-shadow:0 1px 0 var(--jade),0 2px 0 var(--jade-dk)}
+.key.off{opacity:.38}
+.key.mode{flex-basis:calc((100% - 36px)/10*1.6);background:linear-gradient(#2a7a50,var(--jade-dk));color:var(--on-felt-soft);box-shadow:0 4px 0 #134a30;
+  display:flex;align-items:center;justify-content:center;gap:2px;font-size:15px}
+.key.mode::after{display:none}
+.key.mode .on{color:var(--gold);font-weight:700}
+.key.glow{background:linear-gradient(#fff4c8,#f3d77a);animation:glow 1s ease-in-out infinite}
+.key.good{background:linear-gradient(#e4f5df,#c8e6bd)}
+.key.bad{background:linear-gradient(#f9d8d1,#efb6aa)}
+@keyframes glow{50%{box-shadow:0 4px 0 var(--jade),0 5px 0 var(--jade-dk),0 0 0 4px rgba(232,189,82,.55)}}
+body.kb-en .key .r{display:none}
+body.kb-en .key .l{position:static;font-size:17px;font-weight:600;color:var(--ink)}
+body.kb-en .key::after{display:none}
+@media (min-width:520px){.key{height:56px}.key .r{font-size:23px}.key .l{font-size:10.5px}body.kb-en .key .l{font-size:19px}}
+
+/* ---------- result ---------- */
+.res-head{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding-top:10px}
+.stars{font-size:38px;letter-spacing:6px;color:var(--gold)}
+.stars .dim{color:rgba(255,255,255,.18)}
+.res-head h2{font-size:24px;font-weight:700}
+.res-head p{color:var(--on-felt-soft);font-size:14px}
+.res-score{font-family:var(--f-num);font-size:44px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.res-score small{display:block;font-size:12px;font-weight:500;color:var(--on-felt-soft);font-family:var(--f-body);letter-spacing:.1em}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--veil-line);border-radius:14px;overflow:hidden;margin:0}
+.stats div{background:var(--felt-2);padding:12px 14px}
+.stats dt{font-size:12px;color:var(--on-felt-soft)}
+.stats dd{margin:0;font-family:var(--f-num);font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.review{display:flex;flex-direction:column;gap:8px}
+.rv{display:flex;align-items:center;gap:12px;background:var(--veil);border:1px solid var(--veil-line);border-radius:12px;padding:8px 12px}
+.rv .tile{box-shadow:0 3px 0 var(--jade),0 4px 0 var(--jade-dk)}
+.rv div{min-width:0}
+.rv b{font-family:var(--f-num);color:var(--gold);font-size:15px;margin-right:6px}
+.rv span{color:var(--on-felt-soft);font-size:13px}
+.res-btns{display:flex;gap:10px;flex-wrap:wrap}
+.res-btns .btn{flex:1 1 130px}
+@media (prefers-reduced-motion:reduce){.tiles.shake,.float,.key.glow{animation:none}.tiles.pop{animation-duration:.01s}}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- MENU -->
+  <section class="screen" id="menu">
+    <div class="scroll">
+      <div class="hero">
+        <div class="hero-tiles"><div class="tile">速</div><div class="tile">成</div><div class="tile">打</div><div class="tile">字</div></div>
+        <p>零基礎都學得識的中文打字遊戲</p>
+      </div>
+
+      <button class="course" type="button" data-go="learn" id="courseBtn">
+        <div><h2>新手課程</h2><p>第一次接觸速成？先上 5 堂短課：認識字根、字根變形、拆字規則、選字，以及在電腦和手機開啟速成。</p></div>
+        <div class="prog">已完成<b id="courseProg">0 / 5</b></div>
+      </button>
+
+      <div class="levels">
+        <div class="sect-label">遊戲關卡</div>
+        <button class="lvl" data-lv="1" id="lvl-1">
+          <div class="tile xs" style="--tile-ink:var(--green)">初</div>
+          <div><h3>初級<span>字根熱身</span></h3><p>看見字根就按對應的鍵。24 個字根分四組逐步出場，共 32 張牌。</p></div>
+          <div class="best">最高<b data-best="1">—</b></div>
+        </button>
+        <button class="lvl" data-lv="2" id="lvl-2">
+          <div class="tile xs" style="--tile-ink:var(--blue)">中</div>
+          <div><h3>中級<span>拆字出招</span></h3><p>常用單字，畫面會教你拆出首尾兩個字根，連按兩鍵出字。共 20 字。</p></div>
+          <div class="best">最高<b data-best="2">—</b></div>
+        </button>
+        <button class="lvl" data-lv="3" id="lvl-3">
+          <div class="tile xs" style="--tile-ink:var(--red)">高</div>
+          <div><h3>高級<span>詞語衝刺</span></h3><p>連打詞語和短句，沒有拆字提示，打錯才會教你。共 12 組。</p></div>
+          <div class="best">最高<b data-best="3">—</b></div>
+        </button>
+        <button class="lvl" data-go="setup" id="lvl-4">
+          <div class="tile xs" style="--tile-ink:var(--ink)">無</div>
+          <div><h3>無限模式<span>香港生活字句</span></h3><p>日常及工作實用句子，如「唔該埋單」「聽日要交報告」。可以設定練習時間。</p></div>
+          <div class="best">最高<b data-best="4">—</b></div>
+        </button>
+      </div>
+
+      <details class="roots">
+        <summary>字根表（24 個）</summary>
+        <div class="rgroups" id="rgroups"></div>
+      </details>
+
+      <div class="foot">
+        <span>畫面鍵盤左下角「中／英」可切換顯示字根或英文字母，電腦上按 Shift 亦可。</span>
+        <button class="toggle" id="soundBtn" type="button">音效：開</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEARN -->
+  <section class="screen" id="learn" hidden>
+    <div class="scroll" id="lessonList">
+      <div class="top"><button class="icon-btn" type="button" data-go="menu" aria-label="回主頁">←</button><h2>新手課程</h2></div>
+      <p class="small">建議按次序上堂，每堂約 2 至 3 分鐘，有講解亦有即時練習。</p>
+      <div class="lesson-list" id="lessonItems"></div>
+    </div>
+    <div class="player" id="lessonPlayer" hidden>
+      <div class="top"><button class="icon-btn" type="button" id="lpBack" aria-label="返回課程列表">←</button><h2 id="lpTitle"></h2><div class="dots" id="lpDots"></div></div>
+      <div class="lp-body" id="lpBody"></div>
+      <div class="lp-actions"><button class="btn ghost" type="button" id="lpPrev">上一步</button><button class="btn" type="button" id="lpNext">下一步</button></div>
+      <div class="kb" id="learnKb" hidden></div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section class="screen" id="setup" hidden>
+    <div class="scroll">
+      <div class="top"><button class="icon-btn" type="button" data-go="menu" aria-label="回主頁">←</button><h2>無限模式設定</h2></div>
+      <div class="opt">
+        <div class="sect-label">練習時間</div>
+        <div class="seg" id="optTime"></div>
+        <p class="small" id="timeNote"></p>
+      </div>
+      <div class="opt">
+        <div class="sect-label">句子內容</div>
+        <div class="seg" id="optCat"></div>
+        <p class="small" id="catNote"></p>
+      </div>
+      <div class="opt">
+        <div class="sect-label">由哪裡開始</div>
+        <div class="seg" id="optFrom"></div>
+        <p class="small" id="fromNote"></p>
+      </div>
+      <button class="btn big" type="button" id="setupStart">開始練習</button>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="game" hidden>
+    <div class="hud">
+      <div class="lv" id="hudLv">初級<small>1 / 32</small></div>
+      <div class="hearts" id="hearts" aria-label="生命"></div>
+      <div class="timer" id="timer" hidden>15:00</div>
+      <div class="sp"></div>
+      <div class="combo" id="combo"></div>
+      <div class="score" id="score">0</div>
+      <button class="icon-btn" id="pauseBtn" type="button" aria-label="暫停">❚❚</button>
+    </div>
+    <div class="field" id="field">
+      <div class="danger"></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="rail"></div>
+      <div class="overlay" id="banner" hidden><div class="box" id="bannerBox"></div></div>
+      <div class="overlay" id="pauseOv" hidden>
+        <div class="box">
+          <h2>暫停中</h2>
+          <p>休息一下，準備好再繼續。</p>
+          <div class="res-btns" style="width:100%">
+            <button class="btn" id="resumeBtn" type="button">繼續</button>
+            <button class="btn ghost" id="endBtn" type="button" hidden>結束看成績</button>
+            <button class="btn ghost" id="quitBtn" type="button">回主頁</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hint" id="hint" aria-live="polite"></div>
+    <div class="kb" id="kb"></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="result" hidden>
+    <div class="scroll" id="resBody"></div>
+  </section>
+</div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* =========================================================
+   字根與字碼資料
+   ========================================================= */
+const ROOTS = {A:'日',B:'月',C:'金',D:'木',E:'水',F:'火',G:'土',H:'竹',I:'戈',J:'十',K:'大',L:'中',M:'一',N:'弓',O:'人',P:'心',Q:'手',R:'口',S:'尸',T:'廿',U:'山',V:'女',W:'田',X:'難',Y:'卜',Z:'重'};
+const GROUPS = [
+  {name:'第一組 · 哲理類', short:'哲理類', keys:'ABCDEFG', tip:'日、月，加上金木水火土五行'},
+  {name:'第二組 · 筆畫類', short:'筆畫類', keys:'HIJKLMN', tip:'代表筆畫：竹＝撇、戈＝點、十＝交叉、大＝撇捺交叉、中＝直、一＝橫、弓＝鉤'},
+  {name:'第三組 · 人體類', short:'人體類', keys:'OPQR', tip:'人、心、手、口，跟身體有關'},
+  {name:'第四組 · 字形類', short:'字形類', keys:'STUVWY', tip:'按字的外形：尸、廿、山、女、田、卜'}
+];
+const keyGroup = {};
+GROUPS.forEach((g,i) => [...g.keys].forEach(k => keyGroup[k] = i));
+
+// 中級單字：[字, 速成碼, 拆字說明]
+const MID = [
+ ['明','AB','左日右月，直接拼'],['林','DD','兩個木'],['炎','FF','兩個火'],['朋','BB','兩個月'],
+ ['出','UU','上下兩個山'],['品','RR','三個口，取首尾兩個口'],['天','MK','上面一橫是一，下面是大'],
+ ['早','AJ','上日下十'],['王','MG','頭一橫是一，尾是土'],['古','JR','上十下口'],['吉','GR','上土下口'],
+ ['杏','DR','上木下口'],['呆','RD','上口下木'],['上','YM','先寫卜，最後一橫是一'],['下','MY','一橫是一，下面是卜'],
+ ['不','MF','一橫是一，下面三筆當火'],['小','NC','中間鉤是弓，兩點是金'],['少','FH','上面小字頭是火，尾一撇是竹'],
+ ['多','NI','兩個夕，夕拆作弓戈：首弓尾戈'],['文','YK','點和橫是卜，下面交叉是大'],['白','HA','頂上一撇是竹，下面日'],
+ ['目','BU','目字拆作月山'],['耳','SJ','耳字拆作尸十'],['門','AN','門字拆作日弓'],['主','YG','頂點是卜，下面土'],
+ ['東','DW','木中間夾著田'],['西','MW','頂一橫是一，尾是田'],['南','JJ','上面十，尾也是十'],['北','LP','左邊是中，右邊匕當心'],
+ ['來','DO','木字中間夾兩個人'],['去','GI','上土，下面厶是戈'],['今','ON','人字頭，尾是弓'],['年','OQ','頭一撇是人，尾是手'],
+ ['休','OD','亻是人，右邊木'],['沐','ED','氵是水，右邊木'],['你','OF','亻是人，最後兩點算火'],['我','HI','頭一撇是竹，尾斜鉤是戈'],
+ ['是','AO','頂部日，最後一捺是人'],['好','VD','女加子，子的尾是木'],['姓','VM','女加生，生最後一橫是一'],
+ ['媽','VF','女加馬，馬下四點是火'],['生','HM','頭一撇是竹，尾一橫是一'],['男','WS','上田，下面力的尾是尸'],
+ ['字','JD','宀是十，子的尾是木'],['學','HD','頂部是竹，子的尾是木'],['家','JO','宀是十，豕的尾是人'],
+ ['爸','CU','父的頭是金，巴的尾是山'],['愛','BE','爫是月，夂的尾是水'],['想','DP','相的頭是木，下面心'],
+ ['港','EU','氵是水，巳的尾是山'],['電','MU','雨頭是一，电的尾是山'],['茶','TD','艹是廿，尾是木'],
+ ['飯','OE','食字頭是人，反的尾是水'],['吃','RN','口加乞，乞的尾是弓'],['看','HU','頭一撇是竹，目的尾是山'],
+ ['書','LA','聿頭是中，尾是日'],['會','OA','人字頭，尾是日']
+];
+// 其他常用字（含香港生活用字）：字 → [速成碼, 拆字說明]
+const EXTRA = {
+ '香':['HA','禾頭一撇是竹，下面日'],'他':['OD','亻是人，也的尾是木'],'她':['VD','女加也，也的尾是木'],'雨':['MY','頭一橫是一，尾是卜'],
+ '的':['HI','頭一撇是竹，勺的尾是戈'],'左':['KM','頭是大，尾是一'],'右':['KR','頭是大，下面口'],'回':['WR','外框是田，裡面口'],
+ '打':['QN','扌是手，丁的尾是弓'],'嗎':['RF','口加馬，馬下四點是火'],'意':['YP','頂點是卜，最尾是心'],'海':['EY','氵是水，每的尾是卜'],
+ '食':['OV','人字頭，尾是女'],'飲':['OO','食字頭是人，欠的尾是人'],'快':['PK','忄是心，夬的尾是大'],'樂':['VD','頭是女，下面木'],
+ '友':['KE','頭是大，又是水'],'們':['ON','亻是人，門的尾是弓'],'問':['AR','門頭是日，裡面口'],'有':['KB','頭是大，下面月'],
+ '在':['KG','頭是大，尾是土'],'要':['MV','頂一橫是一，下面女'],'很':['HV','彳頭一撇是竹，尾是女'],'午':['OJ','頭一撇是人，尾是十'],
+ '車':['JJ','首十尾十'],'坐':['OG','兩個人，下面土'],'走':['GO','上土，尾一捺是人'],'買':['WC','罒是田，貝的尾是金'],
+ '米':['FD','頂兩點是火，下面木'],'牛':['HQ','頭一撇是竹，尾是手'],'魚':['NF','頭是弓，四點是火'],'果':['WD','上田下木'],
+ '花':['TP','艹是廿，化的尾是心'],'草':['TJ','艹是廿，早的尾是十'],'公':['CI','八是金，厶是戈'],'校':['DK','左邊木，交的尾是大'],
+ '園':['WV','外框是田，袁的尾是女'],'開':['AT','門頭是日，开的尾是廿'],
+ '地':['GD','土加也，也的尾是木'],'巴':['AU','巴字拆作日山'],'士':['JM','上十，下面一橫是一'],'搭':['QR','扌是手，最尾是口'],
+ '返':['YE','辶寫在最先，是卜；反的尾是水'],'工':['MM','首尾兩橫都是一'],'放':['YK','方的頭是卜，攵的尾是大'],'班':['MG','左王的頭是一，右王的尾是土'],
+ '司':['SR','頭是尸，裡面口'],'老':['JP','頭是土，匕的尾是心'],'闆':['AR','門頭是日，品的尾是口'],'同':['BR','外框冂是月，裡面口'],
+ '事':['JN','頭是十，尾鉤是弓'],'餐':['YV','頂部是卜，食的尾是女'],'廳':['IP','广是戈，最尾是心'],'晚':['AU','左日，免的尾是山'],
+ '落':['TR','艹是廿，各的尾是口'],'氣':['OD','气的頭是人，米的尾是木'],'熱':['GF','頭是土，灬是火'],'凍':['IW','冫的頭是戈，東的尾是田'],
+ '記':['YU','言的頭是卜，己的尾是山'],'得':['HI','彳的頭是竹，寸的尾是戈'],'唔':['RR','口加吾，吾的尾是口'],'該':['YO','言的頭是卜，亥的尾是人'],
+ '晨':['AV','頂日，辰的尾是女'],'謝':['YI','言的頭是卜，寸的尾是戈'],'收':['VK','左邊頭是女，攵的尾是大'],'到':['MN','至的頭是一，刂的尾是弓'],
+ '請':['YB','言的頭是卜，青的尾是月'],'話':['YR','言的頭是卜，舌的尾是口'],'機':['DI','左邊木，戈在最尾'],'街':['HN','彳的頭是竹，亍的尾是弓'],
+ '行':['HN','彳的頭是竹，亍的尾是弓'],'市':['YB','頂點是卜，巾的尾是月'],'商':['YR','頂點是卜，最尾是口'],'場':['GH','土加昜，最尾一撇是竹'],
+ '銀':['CV','金加艮，艮的尾是女'],'屋':['SG','尸加至，至的尾是土'],'企':['OM','人字頭，止的尾是一'],'等':['HI','竹字頭，寸的尾是戈'],
+ '排':['QY','扌是手，非的尾是卜'],'隊':['NO','阝的頭是弓，最尾是人'],'時':['AI','左日，寸的尾是戈'],'間':['AA','門頭是日，裡面日'],
+ '點':['WR','黑的頭是田，占的尾是口'],'幾':['VI','頭是女，最尾是戈'],'聽':['SP','耳的頭是尸，最尾是心'],'星':['AM','頂日，生的尾是一'],
+ '期':['TB','其的頭是廿，月在最尾'],'六':['YC','頂點是卜，下面八是金'],'假':['OE','亻是人，最尾又是水'],'味':['RD','口加未，未的尾是木'],
+ '腦':['BW','月字邊，最尾是田'],'網':['VV','糸的頭是女，亡的尾也是女'],'訊':['YJ','言的頭是卜，最尾是十'],'息':['HP','自的頭是竹，下面心'],
+ '議':['YI','言的頭是卜，我的尾是戈'],'件':['OQ','亻是人，牛的尾是手'],'報':['GE','幸的頭是土，又是水'],'告':['HR','頭一撇是竹，下面口'],
+ '加':['KR','力的頭是大，口在最尾'],'辛':['YJ','立的頭是卜，最尾是十'],'苦':['TR','艹是廿，古的尾是口'],'台':['IR','厶是戈，下面口'],
+ '旺':['MA','王的頭是一，日在最尾'],'角':['NG','頭是弓，最尾是土'],'尖':['FK','上小是火，下大'],'沙':['EH','氵是水，少的尾是竹'],
+ '咀':['RM','口加且，且的尾是一'],'埋':['GG','土加里，里的尾是土'],'單':['RJ','頂兩個口，最尾是十'],'檸':['DN','左邊木，丁的尾是弓'],
+ '奶':['VS','女加乃，乃的尾是尸'],'咖':['RR','口加加，加的尾是口'],'啡':['RY','口加非，非的尾是卜'],'盒':['OT','人字頭，皿的尾是廿'],
+ '叫':['RL','口加丩，最尾是中'],'杯':['DF','左邊木，不的尾是火'],'風':['HI','頭一撇是竹，虫的尾是戈'],'交':['YK','頂點是卜，最尾是大'],
+ '通':['YB','辶寫在最先，是卜；甬的尾是月'],'塞':['JG','宀是十，最尾是土'],'個':['OR','亻是人，固的尾是口'],'哋':['RD','口加地，也的尾是木'],
+ '佢':['OS','亻是人，巨的尾是尸'],'咗':['RM','口加左，左的尾是一'],'未':['JD','十加木'],'閒':['AB','門頭是日，裡面月'],
+ '見':['BU','目的頭是月，儿的尾是山'],'再':['MB','頂一橫是一，尾是月'],'油':['EW','氵是水，由的尾是田'],'新':['YL','立的頭是卜，斤的尾是中'],
+ '喺':['RF','口加係，最尾的小是火'],'站':['YR','立的頭是卜，占的尾是口'],'而':['ML','頂一橫是一，最尾是中'],'慢':['PE','忄是心，又是水'],
+ '晏':['AV','頂日，女在最尾'],'係':['OF','亻是人，最尾的小是火'],'啲':['RI','口加的，勺的尾是戈'],'用':['BQ','用字拆作月手'],
+ '卡':['YY','上卜下卜'],'洗':['EU','氵是水，先的尾是山'],'平':['MJ','頂一橫是一，最尾是十'],'貴':['LC','頭是中，貝的尾是金'],
+ '樓':['DV','左邊木，女在最尾'],'忙':['PV','忄是心，亡的尾是女'],'睇':['BH','目的頭是月，弟的尾是竹'],'九':['KN','九字拆作大弓'],
+ '三':['MM','三橫，首尾都是一'],'五':['MM','頂一橫是一，底一橫也是一']
+};
+const DICT = {}, NOTES = {};
+for (const k in ROOTS) if (k !== 'X' && k !== 'Z') DICT[ROOTS[k]] = k;
+MID.forEach(([c,code,n]) => { DICT[c] = code; NOTES[c] = n; });
+for (const c in EXTRA){ DICT[c] = EXTRA[c][0]; if (!NOTES[c]) NOTES[c] = EXTRA[c][1]; }
+
+// 高級：詞語短句
+const PHRASES = {
+  2:['你好','香港','學生','家人','今天','明天','中文','打字','看書','回家','飲茶','食飯','朋友','快樂','我們','天下','出門','白天','今年'],
+  3:['早上好','我愛你','大家好','你好嗎','好多人','我想回家'],
+  4:['東南西北','上下左右','日月山水','一心一意','人山人海','不多不少','大大小小','爸爸媽媽','你去不去','大家一心','我是香港人','我會打中文字']
+};
+
+/* =========================================================
+   無限模式：香港生活句子產生器
+   ========================================================= */
+const HK = {
+  who:['我','你','佢','我哋','佢哋'],
+  whoWork:['我','你','佢','老闆','同事','我哋'],
+  when:['今日','聽日','星期一','星期三','星期五','星期六'],
+  task:['開會','加班','返工','交報告','打卡','用電腦'],
+  transport:['巴士','小巴','的士','電車'],
+  dest:['返工','返學','返屋企','去機場','去旺角','去尖沙咀','去沙田'],
+  place:['旺角','尖沙咀','沙田','巴士站','車站','商場','茶餐廳','銀行','公司','機場'],
+  drink:['凍檸茶','凍奶茶','熱奶茶','咖啡','熱茶'],
+  weather:['好熱','好凍','會落雨','打風'],
+  leisure:['飲茶','食晏','行山','行街','出街','飲咖啡','睇書'],
+  doing:['返工','返屋企','搭巴士','食晏','等車','排隊','行街'],
+  doingWork:['開會','加班','返工','用電腦','睇文件'],
+  food:['奶茶','咖啡','飯盒','早餐','凍檸茶','午餐'],
+  remind:['食飯','休息','飲水','洗手'],
+  remindWork:['打卡','開會','交報告','回訊息','休息'],
+  feel:['好忙','好開心','好辛苦']
+};
+const FIX = {
+  daily:['早晨','唔該','多謝','唔該埋單','有落','聽日見','再見','生日快樂','新年快樂','加油','小心啲','慢慢行','早啲休息','我請你飲茶','我到咗','你食咗飯未','香港啲樓好貴','今日好多人','我哋去飲茶'],
+  work:['收到','明白','收到多謝','辛苦你','我而家開會','請問幾點開會','請問幾點放工','請問幾時交報告','電腦用唔到','手機用唔到','今日要加班','聽日要交報告','我喺公司','記得打卡','多謝你']
+};
+const PATTERNS = [
+  {cat:'daily', f:() => rnd(HK.who) + '搭' + rnd(HK.transport) + rnd(HK.dest)},
+  {cat:'daily', f:() => rnd(HK.who) + '喺' + rnd(HK.place) + '等你'},
+  {cat:'daily', f:() => '唔該' + rnd(HK.drink)},
+  {cat:'daily', f:() => '唔該要一杯' + rnd(HK.drink)},
+  {cat:'daily', f:() => rnd(HK.when) + rnd(HK.weather)},
+  {cat:'daily', f:() => '天文台話' + rnd(['今日','聽日']) + '打風'},
+  {cat:'daily', f:() => rnd(HK.when) + '去' + rnd(HK.leisure)},
+  {cat:'daily', f:() => rnd(HK.who) + rnd(HK.when) + '去' + rnd(HK.leisure)},
+  {cat:'daily', f:() => rnd(HK.who) + '食咗飯未'},
+  {cat:'daily', f:() => rnd(HK.place) + '好多人'},
+  {cat:'daily', f:() => rnd(HK.food) + '好好味'},
+  {cat:'daily', f:() => '記得' + rnd(HK.remind)},
+  {cat:'daily', f:() => '我而家' + rnd(HK.doing)},
+  {cat:'daily', f:() => rnd(FIX.daily)},
+  {cat:'daily', f:() => rnd(FIX.daily)},
+  {cat:'work',  f:() => rnd(HK.whoWork) + rnd(HK.when) + '要' + rnd(HK.task)},
+  {cat:'work',  f:() => '我而家' + rnd(HK.doingWork)},
+  {cat:'work',  f:() => rnd(HK.when) + '要交報告'},
+  {cat:'work',  f:() => rnd(HK.whoWork) + rnd(HK.feel)},
+  {cat:'work',  f:() => '記得' + rnd(HK.remindWork)},
+  {cat:'work',  f:() => rnd(HK.whoWork) + rnd(HK.when) + '放假'},
+  {cat:'work',  f:() => rnd(['我','你','佢','同事']) + '搭' + rnd(HK.transport) + '返工'},
+  {cat:'work',  f:() => '請問' + rnd(HK.when) + '開唔開會'},
+  {cat:'work',  f:() => rnd(FIX.work)},
+  {cat:'work',  f:() => rnd(FIX.work)}
+];
+const WORDS = {
+  daily:['早晨','唔該','多謝','埋單','有落','巴士','小巴','的士','電車','旺角','沙田','尖沙咀','飲茶','食晏','行山','行街','奶茶','咖啡','凍檸茶',
+         '早餐','午餐','晚餐','飯盒','天氣','落雨','打風','屋企','街市','商場','銀行','機場','星期六','放假','好貴','好平','好味','今日','聽日',
+         '我哋','佢哋','茶餐廳','排隊','塞車','香港','天文台','手機','食飯','休息','再見'],
+  work:['返工','放工','開會','加班','打卡','同事','老闆','公司','電腦','手機','電話','文件','報告','訊息','收到','明白','會議','時間','幾點',
+        '而家','好忙','辛苦','休息','請問','多謝','星期一','記得','交通','上網','放假']
+};
+const INF_STAGES = [
+  {name:'第一階段 · 單字', short:'單字', tip:'先熱身，每次一個生活常用字'},
+  {name:'第二階段 · 詞語', short:'詞語', tip:'香港人日常用的詞語，逐個字打'},
+  {name:'第三階段 · 句子', short:'句子', tip:'隨機組合的實用句子，打得越多，跌得越快'}
+];
+
+const LEVELS = {
+  1:{name:'初級', sub:'字根熱身', ink:'var(--green)', durA:8.5, durB:4.6, pts:10, hintAt:.35},
+  2:{name:'中級', sub:'拆字出招', ink:'var(--blue)',  durA:11,  durB:6.5, pts:20, hintAt:.5},
+  3:{name:'高級', sub:'詞語衝刺', ink:'var(--red)',   durA:5.6, durB:3.3, pts:25, hintAt:null},
+  4:{name:'無限模式', sub:'香港生活字句', ink:'var(--green)', pts:20, hintAt:.55}
+};
+
+/* =========================================================
+   工具
+   ========================================================= */
+function rnd(a){ return a[Math.random()*a.length|0]; }
+const shuffle = a => { for (let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = (a,n) => shuffle([...a]).slice(0,n);
+const toItems = str => [...str].map(ch => ({ch, code:DICT[ch]}));
+function load(key, def){ try { const v = JSON.parse(localStorage.getItem(key)); return v == null ? def : v; } catch { return def; } }
+function save(key, v){ try { localStorage.setItem(key, JSON.stringify(v)); } catch {} }
+const prefs = Object.assign({kb:'zh', sound:true, lessons:{}, inf:{limit:900, cat:'all', from:'start'}}, load('sucheng-prefs', {}));
+const best = load('sucheng-best-v2', load('sucheng-best-v1', {}));
+const savePrefs = () => save('sucheng-prefs', prefs);
+
+/* ---------- 音效 ---------- */
+let actx = null;
+function beep(type){
+  if (!prefs.sound) return;
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    const seq = {tick:[[880,.035,'triangle']], step:[[740,.06,'triangle']], err:[[150,.13,'square']],
+      chime:[[660,.08,'triangle'],[990,.12,'triangle']], thud:[[120,.28,'sine']], done:[[660,.08,'triangle'],[880,.08,'triangle'],[1180,.16,'triangle']]}[type] || [];
+    let t = actx.currentTime;
+    seq.forEach(([f,d,w]) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = w; o.frequency.value = f;
+      g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(type==='err'?.05:.12,t+.01);
+      g.gain.exponentialRampToValueAtTime(.0001,t+d);
+      o.connect(g).connect(actx.destination); o.start(t); o.stop(t+d+.02); t += d*.8;
+    });
+  } catch {}
+}
+
+/* =========================================================
+   鍵盤（中／英顯示切換）
+   ========================================================= */
+let kbMode = prefs.kb === 'en' ? 'en' : 'zh';
+function makeKb(el){
+  const rows = ['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+  el.innerHTML = rows.map((r,ri) => `<div class="row">${ri===2 ? '<button type="button" class="key mode" data-mode="1" aria-label="切換顯示字根或英文字母"><span class="m-zh">中</span>／<span class="m-en">英</span></button>' : ''}${[...r].map(k => {
+    const off = (k==='X'||k==='Z');
+    return `<button type="button" class="key${off?' off':''}" data-k="${k}" ${off?'':`data-g="${keyGroup[k]}"`} aria-label="${k} ${ROOTS[k]}"><span class="l">${k}</span><span class="r">${ROOTS[k]}</span></button>`;
+  }).join('')}</div>`).join('');
+  el.addEventListener('pointerdown', e => {
+    const b = e.target.closest('.key'); if (!b) return;
+    e.preventDefault();
+    if (b.dataset.mode) return toggleKb();
+    route(b.dataset.k);
+  });
+}
+function setKbMode(m, persist){
+  kbMode = m;
+  document.body.classList.toggle('kb-en', m === 'en');
+  $$('.m-zh').forEach(s => s.classList.toggle('on', m === 'zh'));
+  $$('.m-en').forEach(s => s.classList.toggle('on', m === 'en'));
+  if (persist){ prefs.kb = m; savePrefs(); }
+}
+function toggleKb(){ setKbMode(kbMode === 'zh' ? 'en' : 'zh', true); beep('tick'); }
+function route(k){
+  if (!$('#game').hidden) press(k);
+  else if (!$('#learn').hidden && !$('#lessonPlayer').hidden) lessonPress(k);
+}
+function flash(k, cls){
+  $$(`.key[data-k="${k}"]`).forEach(b => { b.classList.remove('good','bad'); void b.offsetWidth; b.classList.add(cls); setTimeout(() => b.classList.remove(cls), 200); });
+}
+function glow(k){
+  $$('.key.glow').forEach(b => b.classList.remove('glow'));
+  if (k) $$(`.key[data-k="${k}"]`).forEach(b => b.classList.add('glow'));
+}
+
+/* =========================================================
+   畫面
+   ========================================================= */
+function show(id){
+  ['menu','learn','setup','game','result'].forEach(s => $('#'+s).hidden = (s !== id));
+  if (id === 'menu') refreshMenu();
+}
+function refreshMenu(){
+  $$('[data-best]').forEach(el => { el.textContent = best[el.dataset.best] ?? '—'; });
+  $('#courseProg').textContent = `${LESSONS.filter(l => prefs.lessons[l.id]).length} / ${LESSONS.length}`;
+}
+function buildRootTable(){
+  const colors = ['var(--g0)','var(--g1)','var(--g2)','var(--g3)'];
+  $('#rgroups').innerHTML = GROUPS.map((g,i) => `
+    <div class="rg"><h4><i style="background:${colors[i]}"></i>${g.name}</h4>
+      <div class="rg-list">${[...g.keys].map(k=>`<span class="rk"><b>${ROOTS[k]}</b><small>${k}</small></span>`).join('')}</div>
+    </div>`).join('') +
+    `<p class="small">口訣：日月金木水火土，竹戈十大中一弓，人心手口，尸廿山女田卜。<br>X「難」和 Z「重」是特別鍵，入門時用不著。</p>`;
+}
+function miniKb(){
+  return `<div class="mini-kb" aria-label="速成鍵盤字根位置">${['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'].map(r => `<div class="mrow">${[...r].map(k =>
+    `<div class="mk${k==='X'||k==='Z'?' off':''}" ${keyGroup[k]!=null?`data-g="${keyGroup[k]}"`:''}><b>${ROOTS[k]}</b><small>${k}</small></div>`).join('')}</div>`).join('')}</div>`;
+}
+function eqHtml(ch){
+  const code = DICT[ch];
+  return `<div class="eq"><div class="kc"><div class="tile sm" style="--tile-ink:var(--blue)">${ch}</div><small></small></div><span class="op">=</span>${[...code].map((k,i) =>
+    `${i?'<span class="op">+</span>':''}<div class="kc"><div class="tile xs">${ROOTS[k]}</div><small>${k}</small></div>`).join('')}</div>`;
+}
+const exHtml = (ch, desc) => `<div class="ex"><div class="tile xs" style="--tile-ink:var(--blue)">${ch}</div><span>${desc}</span><code>${DICT[ch]}</code></div>`;
+
+/* =========================================================
+   新手課程
+   ========================================================= */
+const FORMS = [
+  ['氵','E','水','沐、港、沙'],['亻','O','人','休、你、個'],['扌','Q','手','打、搭、排'],['忄','P','心','快、慢、忙'],
+  ['艹','T','廿','茶、花、落'],['宀','J','十','字、家、塞'],['辶','Y','卜','返、通（寫在最先）'],['灬','F','火','熱、媽']
+];
+const STROKES = [
+  ['丿','H','竹','撇：我、生、白'],['丶','I','戈','點：去、公'],['丨','L','中','直：北、而'],['一','M','一','橫：天、王、工'],
+  ['亅','N','弓','鉤：小、事'],['囗','W','田','外框：回、園']
+];
+const CAND_SET = ['我','的','等','得'];
+const LESSONS = [
+  {id:'roots', title:'認識 24 個字根', desc:'鍵盤上每個英文字母代表一個中文部件', steps:[
+    {type:'info', html:() => `<h3>速成靠「字形」打字</h3>
+      <p>速成（又叫「簡易」）是香港最多人用的中文輸入法。它不需要識拼音，只看字的樣子。</p>
+      <p>鍵盤上 24 個英文字母，每個代表一個中文部件，叫做<span class="hl">字根</span>。例如 A 鍵是「日」，B 鍵是「月」。</p>
+      ${miniKb()}
+      <p class="small">X「難」和 Z「重」是特別鍵，入門時用不著。</p>`},
+    {type:'info', html:() => `<h3>24 個字根分成四組</h3>
+      <p>跟住鍵盤字母次序讀，四組各有規律，比死記容易得多。</p>
+      ${GROUPS.map((g,i) => `<div class="grp"><i style="background:var(--g${i})"></i><h4>${g.short}　<span class="small">${g.keys[0]} 至 ${g.keys[g.keys.length-1]}</span></h4>
+        <div class="brow">${[...g.keys].map(k=>`<span class="rk"><b>${ROOTS[k]}</b><small>${k}</small></span>`).join('')}</div><p>${g.tip}</p></div>`).join('')}
+      <div class="card"><b>口訣</b><p style="font-family:var(--f-tile);font-size:19px;line-height:1.7">日月金木水火土<br>竹戈十大中一弓<br>人心手口<br>尸廿山女田卜</p></div>`},
+    {type:'quiz', kind:'root', title:'練習：看字根，按鍵', items:() => pick(Object.keys(keyGroup), 8)},
+    {type:'info', html:() => `<h3>真實鍵盤沒有印字根</h3>
+      <p>工作時用的電腦鍵盤，大多只印英文字母。所以最終目標，是不用看字根也記得每個鍵的位置。</p>
+      <div class="keydemo"><figure><div class="kd"><small>A</small><b>日</b></div><figcaption>「中」顯示字根</figcaption></figure>
+        <figure><div class="kd en"><b>A</b></div><figcaption>「英」只顯示字母</figcaption></figure></div>
+      <p>畫面鍵盤左下角有<span class="hl">「中／英」</span>鍵，按一下就可以切換。用電腦的話，按一下 <span class="kbd">Shift</span> 也可以切換，跟真實速成輸入法切換中英文的按法一樣。</p>
+      <p>下一個練習會轉做「英」模式，試下靠記憶去按。</p>`},
+    {type:'quiz', kind:'root', title:'挑戰：英文鍵盤模式', en:true, items:() => pick(Object.keys(keyGroup), 6)}
+  ]},
+  {id:'forms', title:'字根的變形', desc:'氵是水、亻是人：字根入字會變樣', steps:[
+    {type:'info', html:() => `<h3>字根放進字裡會變樣</h3>
+      <p>同一個字根，在不同位置形狀會改變，但仍然按同一個鍵。先記熟以下最常見的變形：</p>
+      <div class="formgrid">${FORMS.map(([s,k,r,ex]) => `<div class="form"><span class="sym">${s}</span><b>${r}<code>${k}</code></b><small>${ex}</small></div>`).join('')}</div>`},
+    {type:'info', html:() => `<h3>筆畫也有對應的字根</h3>
+      <p>單獨一筆的筆畫，都用筆畫類字根代表。拆字時看到這些筆畫，就按對應的鍵：</p>
+      <div class="formgrid">${STROKES.map(([s,k,r,ex]) => `<div class="form"><span class="sym">${s}</span><b>${r}<code>${k}</code></b><small>${ex}</small></div>`).join('')}</div>`},
+    {type:'quiz', kind:'form', title:'練習：變形屬於哪個字根？', items:() => pick([...FORMS, ...STROKES], 8)}
+  ]},
+  {id:'rule', title:'速成規則：首尾兩碼', desc:'只取第一個和最後一個字根', steps:[
+    {type:'info', html:() => `<h3>只要兩個字根</h3>
+      <p>打一個字，只需要它的<span class="hl">第一個字根（首碼）</span>和<span class="hl">最後一個字根（尾碼）</span>，中間的部分全部不用理。</p>
+      ${eqHtml('明')}
+      <p>「明」由日和月組成：首碼日（A），尾碼月（B），所以打 <span class="kbd">A</span> <span class="kbd">B</span>。</p>`},
+    {type:'info', html:() => `<h3>誰是第一、誰是最後？跟筆順</h3>
+      <p>寫字的次序決定首碼和尾碼，記住三個方向：</p>
+      <div class="card">
+        <div class="rule"><span class="rn">先上後下</span>${exHtml('早','上日下十')}</div>
+        <div class="rule"><span class="rn">先左後右</span>${exHtml('休','左亻（人）右木')}</div>
+        <div class="rule"><span class="rn">先外後內</span>${exHtml('回','外框田，裡面口')}</div>
+      </div>`},
+    {type:'info', html:() => `<h3>中間的部分不用理</h3>
+      <p>筆畫多的字一樣只看頭和尾。例如「媽」：首碼是「女」，右邊的馬有很多筆，但只看它最後的四點（火）。</p>
+      ${eqHtml('媽')}
+      <p>再看「港」：頭是氵（水），最尾的巳收筆是山，所以是 <span class="kbd">E</span> <span class="kbd">U</span>。</p>
+      ${eqHtml('港')}`},
+    {type:'quiz', kind:'char', title:'練習：拆字並打出來', items:() => ['明','早','杏','休','沐','回','呆','好']}
+  ]},
+  {id:'select', title:'一碼字與選字', desc:'單一字根的字，以及遇到重碼怎樣揀字', steps:[
+    {type:'info', html:() => `<h3>有些字本身就是字根</h3>
+      <p>日、月、人、大、口、山……這些字本身就是一個字根，只要按<span class="hl">一個鍵</span>。</p>
+      <div class="brow">${['日','人','大','山','口','手'].map(c => `<span class="rk"><b>${c}</b><small>${DICT[c]}</small></span>`).join('')}</div>
+      <p>在真實的速成輸入法，打完字碼之後要按 <span class="kbd">空白鍵</span> 才會出字。</p>`},
+    {type:'info', html:() => `<h3>重碼：同一個碼有幾個字</h3>
+      <p>速成只用兩碼，所以有些字的碼會一樣。例如「我、的、等、得」都是首碼竹、尾碼戈，即 <span class="kbd">H</span> <span class="kbd">I</span>。</p>
+      <div class="candbar"><span class="typed">HI</span>${CAND_SET.map((c,i) => `<span class="cand static"><small>${i+1}</small>${c}</span>`).join('')}</div>
+      <p>打完碼後會彈出<span class="hl">選字窗</span>，按數字鍵揀字；想要第一個字，直接按空白鍵就可以。</p>
+      <p class="small">選字窗的排列次序，會因輸入法版本和你平時的用字習慣而不同，上面只是示範。</p>`},
+    {type:'quiz', kind:'cand', title:'練習：打碼再揀字', items:() => shuffle([...CAND_SET])}
+  ]},
+  {id:'device', title:'在電腦和手機開速成', desc:'加入速成輸入法，以及中英切換', steps:[
+    {type:'info', html:() => `<h3>電腦</h3>
+      <div class="card howto"><h4>Windows 10 / 11</h4><ol>
+        <li>打開「設定」→「時間與語言」→「語言與地區」。</li>
+        <li>加入「中文（香港特別行政區）」，然後在它的「語言選項」加入鍵盤「Microsoft 速成」。</li>
+        <li>按 <span class="kbd">Windows</span> + <span class="kbd">空白鍵</span> 切換輸入法；用速成時按 <span class="kbd">Shift</span> 切換中／英文。</li></ol></div>
+      <div class="card howto"><h4>Mac</h4><ol>
+        <li>打開「系統設定」→「鍵盤」→「輸入方式」旁的「編輯」。</li>
+        <li>按「＋」，選「繁體中文」，再選「速成」。</li>
+        <li>按 <span class="kbd">Control</span> + <span class="kbd">空白鍵</span>（或地球鍵）切換輸入法。</li></ol></div>
+      <p class="small">不同系統版本的選單名稱可能略有不同。</p>`},
+    {type:'info', html:() => `<h3>手機</h3>
+      <div class="card howto"><h4>iPhone</h4><ol>
+        <li>「設定」→「一般」→「鍵盤」→「鍵盤」→「新增鍵盤」。</li>
+        <li>選「繁體中文」，勾選「速成」。</li>
+        <li>打字時按鍵盤上的地球圖示切換。</li></ol></div>
+      <div class="card howto"><h4>Android</h4><ol>
+        <li>常用的 Gboard：在鍵盤設定的「語言」新增「中文（香港）」。</li>
+        <li>揀選「速成」鍵盤版面。</li>
+        <li>按地球圖示或長按空白鍵切換。</li></ol></div>
+      <div class="card"><b>工作時的小貼士</b><p>打英文電郵時先按 <span class="kbd">Shift</span> 轉英文；遇到不懂拆的字，可以先打同音的常用詞，或者上網搜尋「倉頡字典」查字碼，取首尾兩碼就是速成碼。</p></div>`},
+    {type:'info', html:() => `<h3>完成課程，開始練習！</h3>
+      <p>建議按以下次序練習，每日 15 分鐘，一兩星期就會越打越順：</p>
+      <div class="card">
+        <p><span class="hl">初級</span>　記熟 24 個字根的位置</p>
+        <p><span class="hl">中級</span>　練習首尾兩碼拆字</p>
+        <p><span class="hl">高級</span>　連打詞語</p>
+        <p><span class="hl">無限模式</span>　設定 15 分鐘，練習香港生活和工作句子</p>
+      </div>
+      <p>熟練之後，把鍵盤轉做「英」模式來玩，就跟真實鍵盤一樣了。</p>`}
+  ]}
+];
+
+let LP = null, Q = null;
+function renderLessonList(){
+  $('#lessonItems').innerHTML = LESSONS.map((l,i) => `<button type="button" class="les${prefs.lessons[l.id]?' done':''}" data-lesson="${i}">
+    <span class="no">${prefs.lessons[l.id] ? '✓' : i+1}</span><span><h3>${l.title}</h3><p>${l.desc}</p></span><span class="st">${prefs.lessons[l.id]?'已完成':'未上'}</span></button>`).join('');
+}
+function openLearn(){
+  renderLessonList();
+  $('#lessonList').hidden = false; $('#lessonPlayer').hidden = true;
+  show('learn');
+}
+function openLesson(i){
+  LP = {li:i, si:0}; Q = null;
+  $('#lessonList').hidden = true; $('#lessonPlayer').hidden = false;
+  renderStep();
+}
+function leaveQuiz(){
+  if (Q && Q.prevMode) setKbMode(Q.prevMode, false);
+  Q = null; glow(null);
+}
+function renderStep(){
+  leaveQuiz();
+  const L = LESSONS[LP.li], st = L.steps[LP.si];
+  $('#lpTitle').textContent = L.title;
+  $('#lpDots').innerHTML = L.steps.map((_,i) => `<i class="${i<=LP.si?'on':''}"></i>`).join('');
+  $('#lpPrev').disabled = LP.si === 0;
+  $('#lpNext').textContent = LP.si === L.steps.length-1 ? '完成這一課' : '下一步';
+  if (st.type === 'info'){
+    $('#lpBody').innerHTML = st.html();
+    $('#learnKb').hidden = true; $('#lpNext').disabled = false;
+  } else {
+    Q = {kind:st.kind, title:st.title, items:st.items(), i:0, ki:0, wrong:0, done:false, phase:'code', feed:'', fcls:''};
+    if (st.en && kbMode !== 'en'){ Q.prevMode = kbMode; setKbMode('en', false); Q.feed = '鍵盤已轉做「英」模式，完成練習後會轉回來。'; }
+    $('#learnKb').hidden = false; $('#lpNext').disabled = true;
+    renderQuiz();
+  }
+  $('#lpBody').scrollTop = 0;
+}
+function qCode(it){
+  if (Q.kind === 'root') return it;
+  if (Q.kind === 'form') return it[1];
+  return DICT[it];
+}
+function renderQuiz(){
+  const n = Q.items.length;
+  let prompt = '', expect = null;
+  if (Q.done){
+    prompt = `<div class="tile" style="--tile-ink:var(--red)">好</div><p>全部答對了！按「${LP.si === LESSONS[LP.li].steps.length-1 ? '完成這一課' : '下一步'}」繼續。</p>`;
+  } else {
+    const it = Q.items[Q.i], code = qCode(it);
+    if (Q.kind === 'root'){
+      prompt = `<div class="tile" style="--tile-ink:var(--green)">${ROOTS[it]}</div><p>按「${ROOTS[it]}」所在的鍵</p>`;
+      if (Q.wrong > 0) expect = code;
+    } else if (Q.kind === 'form'){
+      prompt = `<div class="tile" style="--tile-ink:var(--green)">${it[0]}</div><p>這個變形屬於哪個字根？${Q.wrong>0 ? `<br><span class="small">提示：${it[0]} 是「${it[2]}」</span>` : ''}</p>`;
+      if (Q.wrong > 0) expect = code;
+    } else if (Q.kind === 'char'){
+      prompt = `<div class="tile" style="--tile-ink:var(--blue)">${it}</div><div class="line" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">${chips({ch:it, code}, Q.ki, true)}</div><p class="small">${NOTES[it] || ''}</p>`;
+      expect = code[Q.ki];
+    } else if (Q.kind === 'cand'){
+      if (Q.phase === 'code'){
+        prompt = `<p>打出「<span class="big">${it}</span>」</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">${chips({ch:it, code}, Q.ki, true)}</div>`;
+        expect = code[Q.ki];
+      } else {
+        prompt = `<p>選字窗彈出來了，揀「<span class="big">${it}</span>」</p><div class="candbar"><span class="typed">${code}</span>${Q.cands.map((c,i) => `<button type="button" class="cand" data-cand="${c}"><small>${i+1}</small>${c}</button>`).join('')}</div><p class="small">可以直接點選，或按數字鍵 1 至 4。</p>`;
+      }
+    }
+  }
+  $('#lpBody').innerHTML = `<div class="qhead"><h3>${Q.title}</h3><span>${Math.min(Q.i+1,n)} / ${n}</span></div>
+    <div class="qprompt">${prompt}</div><div class="qfeed ${Q.fcls}">${Q.feed}</div>`;
+  glow(expect);
+}
+function qAdvance(){
+  Q.i++; Q.ki = 0; Q.wrong = 0; Q.phase = 'code';
+  Q.feed = '答對了！'; Q.fcls = 'good';
+  if (Q.i >= Q.items.length){ Q.done = true; Q.feed = ''; $('#lpNext').disabled = false; beep('done'); glow(null); }
+  else beep('chime');
+  renderQuiz();
+}
+function lessonPress(k){
+  if (!Q || Q.done || (Q.kind === 'cand' && Q.phase === 'pick')) return;
+  if (k === 'X' || k === 'Z') return;
+  const it = Q.items[Q.i], code = qCode(it);
+  const exp = (Q.kind === 'root' || Q.kind === 'form') ? code : code[Q.ki];
+  if (k === exp){
+    flash(k, 'good');
+    if (Q.kind === 'root' || Q.kind === 'form') return qAdvance();
+    Q.ki++;
+    if (Q.ki >= code.length){
+      if (Q.kind === 'cand'){ Q.phase = 'pick'; Q.cands = shuffle([...CAND_SET]); Q.feed = ''; Q.fcls = ''; beep('step'); return renderQuiz(); }
+      return qAdvance();
+    }
+    Q.feed = ''; Q.fcls = ''; beep('tick'); renderQuiz();
+  } else {
+    flash(k, 'bad'); beep('err'); Q.wrong++;
+    Q.fcls = 'bad';
+    if (Q.kind === 'root') Q.feed = `這是「${ROOTS[k]}」（${k}）。「${ROOTS[exp]}」在 ${exp} 鍵，已經幫你亮起。`;
+    else if (Q.kind === 'form') Q.feed = `${it[0]} 屬於「${it[2]}」，在 ${exp} 鍵。`;
+    else Q.feed = `要按的是「${ROOTS[exp]}」（${exp}），看亮起的鍵。`;
+    renderQuiz();
+  }
+}
+function pickCand(c){
+  if (!Q || Q.kind !== 'cand' || Q.phase !== 'pick') return;
+  const it = Q.items[Q.i];
+  if (c === it) qAdvance();
+  else { beep('err'); Q.feed = `這是「${c}」，再揀一次「${it}」。`; Q.fcls = 'bad'; renderQuiz(); }
+}
+
+/* =========================================================
+   無限模式設定
+   ========================================================= */
+const TIME_OPTS = [[0,'不限時'],[180,'3 分鐘'],[300,'5 分鐘'],[600,'10 分鐘'],[900,'15 分鐘'],[1800,'30 分鐘']];
+const CAT_OPTS = [['all','全部'],['daily','日常生活'],['work','工作辦公']];
+const FROM_OPTS = [['start','由單字開始'],['sent','直接打句子']];
+function renderSetup(){
+  const seg = (opts, cur, key) => opts.map(([v,l]) => `<button type="button" data-opt="${key}" data-val="${v}" aria-pressed="${String(v)===String(cur)}">${l}</button>`).join('');
+  $('#optTime').innerHTML = seg(TIME_OPTS, prefs.inf.limit, 'limit');
+  $('#optCat').innerHTML = seg(CAT_OPTS, prefs.inf.cat, 'cat');
+  $('#optFrom').innerHTML = seg(FROM_OPTS, prefs.inf.from, 'from');
+  $('#timeNote').textContent = prefs.inf.limit
+    ? `限時模式沒有生命限制，牌落地只會斷連擊；${prefs.inf.limit/60} 分鐘一到就結束，暫停時計時會停。`
+    : '不限時：有 3 條命，每完成 20 組多送一條，看你撐得多久。';
+  $('#catNote').textContent = {all:'日常生活和工作句子混合出現。', daily:'飲茶、搭車、天氣、問候，例如「唔該埋單」「我喺旺角等你」。', work:'返工、開會、交報告，例如「收到多謝」「聽日要交報告」。'}[prefs.inf.cat];
+  $('#fromNote').textContent = prefs.inf.from === 'start' ? '先打 8 個單字和 12 個詞語熱身，之後全部是句子。' : '一開始就打句子，適合已經記熟字根的人。';
+}
+
+/* =========================================================
+   遊戲
+   ========================================================= */
+let S = null, last = 0, raf = 0;
+
+function buildQueue(lv){
+  if (lv === 4) return [];
+  if (lv === 1){
+    const q = []; let pool = [];
+    GROUPS.forEach((g,gi) => {
+      const fresh = [...g.keys]; pool = pool.concat(fresh);
+      const wave = shuffle([...fresh]);
+      while (wave.length < 8) wave.push(pool[Math.random()*pool.length|0]);
+      shuffle(wave);
+      for (let i=1;i<wave.length;i++) if (wave[i]===wave[i-1]) { const j=(i+2)%wave.length; [wave[i],wave[j]]=[wave[j],wave[i]]; }
+      wave.forEach((k,i) => q.push({items:[{ch:ROOTS[k],code:k}], wave: i===0 ? gi : null}));
+    });
+    return q;
+  }
+  if (lv === 2){
+    const easy = MID.filter(m => m[1][0]===m[1][1] || ['明','天','早','古','上','下'].includes(m[0]));
+    const rest = MID.filter(m => !easy.includes(m));
+    return [...pick(easy,4), ...pick(rest,16)].map(([ch,code]) => ({items:[{ch,code}]}));
+  }
+  return [...pick(PHRASES[2],4), ...pick(PHRASES[3],4), ...pick(PHRASES[4],4)].map(p => ({items:toItems(p)}));
+}
+function poolWords(cat){ return cat === 'all' ? [...WORDS.daily, ...WORDS.work] : WORDS[cat]; }
+function poolSingles(cat){ return [...new Set(poolWords(cat).join(''))].filter(c => DICT[c] && DICT[c].length === 2); }
+function makeSentence(cat){ return rnd(PATTERNS.filter(p => cat === 'all' || p.cat === cat)).f(); }
+function genText(stage){
+  const cat = S.opts.cat;
+  for (let i = 0; i < 80; i++){
+    const s = stage === 0 ? rnd(S.singles) : stage === 1 ? rnd(poolWords(cat)) : makeSentence(cat);
+    if (s.length <= 8 && !S.seen.has(s)){ S.seen.add(s); return s; }
+  }
+  if (stage === 2) S.seen.clear();
+  let s; do { s = makeSentence(cat); } while (s.length > 8);
+  return s;
+}
+
+function start(lv, opts){
+  beep('tick');
+  if (lv === 4){ opts = opts || {...prefs.inf}; }
+  const timed = lv === 4 && opts.limit > 0;
+  S = {lv, opts:opts||{}, q:buildQueue(lv), qi:-1, lives: timed ? Infinity : 3, maxLives:3, score:0, combo:0, maxCombo:0, ok:0, bad:0, done:0,
+       misses:{}, play:0, paused:false, over:false, cur:null, prog:0, dur:1, hold:0, banner:false, bannerQueue:null,
+       cleared:0, seen:new Set(), stage:-1, limit: timed ? opts.limit : 0, left: timed ? opts.limit : 0, lastSec:-1};
+  if (lv === 4) S.singles = poolSingles(S.opts.cat);
+  $('#tiles').style.setProperty('--tile-ink', LEVELS[lv].ink);
+  show('game'); $('#pauseOv').hidden = true; $('#endBtn').hidden = (lv !== 4);
+  $('#hearts').hidden = timed; $('#timer').hidden = !timed;
+  const intro = ['','字根會從上面跌落，在落地前按下對應的鍵。','把字拆成首尾兩個字根，連按兩個鍵。','逐個字打出整組詞語，打錯了才有提示。',
+    `香港${{all:'生活及工作',daily:'日常生活',work:'工作辦公'}[S.opts.cat]}字句，隨機組合，每局都不同。`][lv];
+  const rule = lv === 4 ? (timed ? `練習 ${S.limit/60} 分鐘，牌落地不扣命，只會斷連擊。` : '有 3 條命，每完成 20 組多送一條，最多 5 條。') : '有 3 條命，牌落地就扣一條。';
+  showBanner(`<h2>${LEVELS[lv].name}</h2><p>${intro}</p><p>${rule}</p>`, 2.4);
+  next(true);
+  last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
+}
+
+function next(first){
+  S.qi++;
+  const L = LEVELS[S.lv];
+  let t, bannerHtml = null;
+  if (S.lv === 4){
+    const stage = S.opts.from === 'sent' ? 2 : (S.cleared < 8 ? 0 : S.cleared < 20 ? 1 : 2);
+    if (stage !== S.stage){
+      S.stage = stage;
+      bannerHtml = `<h2>${INF_STAGES[stage].name}</h2><p>${INF_STAGES[stage].tip}</p>`;
+      $('#tiles').style.setProperty('--tile-ink', ['var(--green)','var(--blue)','var(--red)'][stage]);
+    }
+    t = {items: toItems(genText(stage))};
+    const perChar = Math.max(2.5, 6 - S.cleared * .05);
+    S.dur = t.items.length === 1 ? perChar * 1.6 : perChar * t.items.length;
+  } else {
+    if (S.qi >= S.q.length) return finish(true);
+    t = S.q[S.qi];
+    const frac = S.qi / Math.max(1, S.q.length-1);
+    const per = L.durA + (L.durB - L.durA) * frac;
+    S.dur = S.lv === 3 ? per * t.items.length : per;
+    if (t.wave != null){
+      const g = GROUPS[t.wave];
+      const keys = [...g.keys].map(k=>`<span class="rk"><b>${ROOTS[k]}</b><small>${k}</small></span>`).join('');
+      bannerHtml = `<h2>${g.name}</h2><div class="brow">${keys}</div><p>${g.tip}</p>`;
+    }
+  }
+  S.cur = {items:t.items, ci:0, ki:0, hinted:false, resolving:false, rt:0, final:false};
+  S.prog = 0;
+  if (bannerHtml){
+    if (first) S.bannerQueue = {html:bannerHtml, t:2.4};
+    else showBanner(bannerHtml, 2.4);
+  } else if (!first) S.hold = .3;
+  const tiles = $('#tiles');
+  tiles.className = 'tiles';
+  const n = t.items.length, size = n >= 8 ? 'xxs' : n >= 5 ? 'xs' : n >= 3 ? 'sm' : '';
+  tiles.style.gap = n >= 7 ? '4px' : '';
+  tiles.innerHTML = t.items.map((it,i) => `<div class="tile ${size}${n>1&&i===0?' now':''}">${it.ch}</div>`).join('');
+  renderHud(); renderHint(); renderKeys(); place();
+}
+
+function showBanner(html, t){
+  $('#bannerBox').innerHTML = html; $('#banner').hidden = false;
+  S.banner = true; S.hold = t;
+}
+
+function loop(now){
+  const dt = Math.min(.05, (now-last)/1000); last = now;
+  if (S && !S.paused && !S.over){
+    S.play += dt;
+    const c = S.cur;
+    if (S.limit && !S.banner){
+      S.left -= dt;
+      renderTimer();
+      if (S.left <= 0){ S.left = 0; renderTimer(); finish(true); raf = requestAnimationFrame(loop); return; }
+    }
+    if (S.hold > 0){
+      S.hold -= dt;
+      if (S.hold <= 0){
+        if (S.bannerQueue){ const b = S.bannerQueue; S.bannerQueue = null; showBanner(b.html, b.t); }
+        else if (S.banner){ S.banner = false; $('#banner').hidden = true; }
+      }
+    } else if (c && c.resolving){
+      c.rt -= dt;
+      if (c.rt <= 0){ if (c.final) finish(false); else next(); }
+    } else if (c){
+      S.prog += dt / S.dur;
+      const L = LEVELS[S.lv];
+      if (L.hintAt != null && !c.hinted && S.prog >= L.hintAt){ c.hinted = true; renderHint(); renderKeys(); }
+      if (S.prog >= 1){ S.prog = 1; miss(); }
+      place();
+    }
+  }
+  raf = requestAnimationFrame(loop);
+}
+function renderTimer(){
+  const sec = Math.ceil(S.left);
+  if (sec === S.lastSec) return;
+  S.lastSec = sec;
+  const el = $('#timer');
+  el.textContent = `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;
+  el.classList.toggle('low', sec <= 30);
+}
+
+function place(){
+  const field = $('#field'), tiles = $('#tiles');
+  const dist = Math.max(0, field.clientHeight - tiles.offsetHeight - 12 - 16 - 14);
+  const ty = `translateY(${(S.prog*dist).toFixed(1)}px)`;
+  tiles.style.setProperty('--ty', ty);
+  if (!tiles.classList.contains('pop')) tiles.style.transform = ty;
+}
+
+function press(k){
+  if (!S || S.paused || S.over || S.banner || !S.cur || S.cur.resolving) return;
+  if (k === 'X' || k === 'Z') return;
+  const c = S.cur, it = c.items[c.ci], exp = it.code[c.ki];
+  if (k === exp){
+    S.ok++; c.ki++; flash(k,'good');
+    if (c.ki >= it.code.length) charDone(); else { beep('tick'); renderHint(); renderKeys(); }
+  } else {
+    S.bad++; S.combo = 0; flash(k,'bad'); beep('err');
+    S.misses[it.ch] = (S.misses[it.ch]||0) + 1;
+    const tiles = $('#tiles'); tiles.classList.remove('shake'); void tiles.offsetWidth; tiles.classList.add('shake');
+    if (S.lv === 3) c.hinted = true;
+    renderHud(); renderHint(); renderKeys();
+  }
+}
+function charDone(){
+  const c = S.cur; S.done++;
+  const tiles = $('#tiles').children;
+  if (c.items.length > 1){ tiles[c.ci].classList.remove('now'); tiles[c.ci].classList.add('done'); }
+  c.ci++; c.ki = 0;
+  if (c.ci >= c.items.length) return targetDone();
+  tiles[c.ci].classList.add('now');
+  if (S.lv === 3) c.hinted = false;
+  if (S.lv === 4) c.hinted = false;
+  beep('step'); renderHint(); renderKeys();
+}
+function targetDone(){
+  const c = S.cur, L = LEVELS[S.lv];
+  c.resolving = true; c.rt = .45;
+  S.combo++; S.maxCombo = Math.max(S.maxCombo, S.combo);
+  S.cleared++;
+  let bonusLife = false;
+  if (S.lv === 4 && !S.limit && S.cleared % 20 === 0 && S.lives < 5){ S.lives++; S.maxLives = Math.max(S.maxLives, S.lives); bonusLife = true; }
+  const n = c.items.length;
+  const gain = Math.round(L.pts * n * (1 + Math.min(S.combo,20)*.05)) + Math.round((1-S.prog) * 10 * n);
+  S.score += gain;
+  floatText('+' + gain);
+  $('#tiles').classList.add('pop');
+  beep('chime'); renderHud(); renderKeys();
+  $('#hint').innerHTML = `<div class="line"><span class="big">${c.items.map(i=>i.ch).join('')}</span><span>${c.items.map(i=>i.code).join(' ')}</span></div><div class="note">${bonusLife ? `完成 ${S.cleared} 組，多送一條命！` : S.combo>=3 ? `連擊 ${S.combo}！分數加成中` : '答對了'}</div>`;
+}
+function miss(){
+  const c = S.cur;
+  c.resolving = true; c.rt = 1.9;
+  S.combo = 0;
+  if (!S.limit) S.lives--;
+  c.items.slice(c.ci).forEach(it => S.misses[it.ch] = (S.misses[it.ch]||0) + 1);
+  if (S.lives <= 0) c.final = true;
+  $('#tiles').classList.add('hit');
+  beep('thud'); renderHud(); renderKeys();
+  const rest = c.items.slice(c.ci);
+  $('#hint').innerHTML = `<div class="line answer">落地了！記住答案：</div><div class="line">${rest.map(it =>
+    `<span class="chip"><b>${it.ch}</b><code>${it.code}</code><em>${[...it.code].map(k=>ROOTS[k]).join(' ')}</em></span>`).join('')}</div>`;
+}
+function floatText(t){
+  const el = document.createElement('div');
+  el.className = 'float'; el.textContent = t;
+  const tiles = $('#tiles');
+  el.style.top = (tiles.offsetTop + S.prog * Math.max(0, $('#field').clientHeight - tiles.offsetHeight - 42)) + 'px';
+  $('#field').appendChild(el); setTimeout(() => el.remove(), 950);
+}
+
+function renderHud(){
+  const L = LEVELS[S.lv];
+  $('#hudLv').innerHTML = S.lv === 4
+    ? `${L.name}<small>第 ${S.cleared+1} 組 · ${INF_STAGES[Math.max(0,S.stage)].short}</small>`
+    : `${L.name}<small>${Math.min(S.qi+1,S.q.length)} / ${S.q.length}</small>`;
+  if (!S.limit) $('#hearts').innerHTML = Array.from({length:S.maxLives}, (_,i) => `<span class="${i<S.lives?'':'lost'}">♥</span>`).join('');
+  $('#score').textContent = S.score;
+  $('#combo').textContent = S.combo >= 2 ? `連擊×${S.combo}` : '';
+}
+function chips(it, ki, revealKeys){
+  const n = it.code.length;
+  return [...it.code].map((k,i) => {
+    const label = n === 1 ? '字根本身' : (i === 0 ? '首碼' : '尾碼');
+    const st = i < ki ? ' ok' : (i === ki ? ' next' : '');
+    return `<span class="chip${st}"><em>${label}</em><b>${ROOTS[k]}</b><code>${(i<ki||revealKeys)?k:'?'}</code></span>`;
+  }).join('<span class="note">+</span>');
+}
+function renderHint(){
+  const c = S.cur, h = $('#hint'); if (!c) return;
+  const it = c.items[c.ci];
+  const pos = c.items.length > 1 ? `第 ${c.ci+1} / ${c.items.length} 字　` : '';
+  if (S.lv === 1){
+    const g = GROUPS[keyGroup[it.code]];
+    h.innerHTML = `<div class="line">在鍵盤上找出 <span class="big">${it.ch}</span> 字根</div>
+      <div class="note">${c.hinted ? `提示：它在 <b style="color:var(--gold)">${it.code}</b> 鍵，已經幫你亮起` : `${g.short}：${g.tip}`}</div>`;
+  } else if (S.lv === 2 || S.lv === 4){
+    const note = NOTES[it.ch] || (it.code.length === 1 ? '它本身就是一個字根' : '取第一個和最後一個字根');
+    h.innerHTML = `<div class="line"><span class="big">${it.ch}</span>${chips(it, c.ki, c.hinted)}</div>
+      <div class="note">${pos}${note}${c.hinted ? '' : '　（找不到？稍後會亮起）'}</div>`;
+  } else {
+    if (c.hinted){
+      h.innerHTML = `<div class="line"><span class="big">${it.ch}</span>${chips(it, c.ki, true)}</div>
+        <div class="note">${pos}${NOTES[it.ch] || (it.code.length===1 ? '它本身就是一個字根' : '取第一個和最後一個字根')}</div>`;
+    } else {
+      h.innerHTML = `<div class="line">${pos}打出 <span class="big">${it.ch}</span>${c.ki ? `<span class="chip ok"><code>${it.code.slice(0,c.ki)}</code></span>` : ''}</div>
+        <div class="line"><button type="button" class="hint-btn" id="hintBtn">看拆法（−20 分）</button></div>`;
+      $('#hintBtn').addEventListener('click', () => {
+        if (!S.cur || S.cur.resolving) return;
+        S.cur.hinted = true; S.score = Math.max(0, S.score-20);
+        renderHud(); renderHint(); renderKeys();
+      });
+    }
+  }
+}
+function renderKeys(){
+  const c = S && S.cur;
+  if (!c || c.resolving || !c.hinted) return glow(null);
+  glow(c.items[c.ci].code[c.ki]);
+}
+
+function setPause(p){
+  if (!S || S.over) return;
+  S.paused = p; $('#pauseOv').hidden = !p;
+  if (!p) last = performance.now();
+}
+function finish(cleared){
+  if (S.over) return;
+  S.over = true; cancelAnimationFrame(raf); glow(null);
+  const L = LEVELS[S.lv], inf = S.lv === 4, timed = inf && S.limit > 0;
+  const acc = S.ok + S.bad ? S.ok / (S.ok + S.bad) : 0;
+  const mins = Math.max(1, S.play / 60);
+  let stars;
+  if (inf){
+    if (timed){ const rate = S.cleared / mins; stars = rate >= 4 ? 3 : rate >= 2.5 ? 2 : rate >= 1.2 ? 1 : 0; }
+    else stars = S.cleared >= 45 ? 3 : S.cleared >= 25 ? 2 : S.cleared >= 10 ? 1 : 0;
+  } else stars = !cleared ? 0 : 1 + (S.lives>=2 && acc>=.8 ? 1 : 0) + (S.lives===3 && acc>=.92 ? 1 : 0);
+  const cpm = S.play > 0 ? Math.round(S.done / (S.play/60)) : 0;
+  const key = String(S.lv);
+  const isBest = S.score > (best[key] || 0);
+  if (isBest){ best[key] = S.score; save('sucheng-best-v2', best); }
+  const titles = inf && timed ? ['繼續練習','有進步','穩步上揚','出神入化'] : ['再試一次','繼續加油','穩步上揚','出神入化'];
+  const playedMin = Math.round(S.play / 60);
+  const lines = inf ? (timed
+    ? [`練習了 ${playedMin || '不足 1'} 分鐘，完成 ${S.cleared} 組。慢慢來，準確比快更重要。`,
+       `練習了 ${playedMin} 分鐘，完成 ${S.cleared} 組，手指開始記得位置了。`,
+       `練習了 ${playedMin} 分鐘，完成 ${S.cleared} 組，已經打得出句子了！`,
+       `練習了 ${playedMin} 分鐘，完成 ${S.cleared} 組，返工打中文已經難不到你。`]
+    : [`撐過 ${S.cleared} 組。看看最常錯的字，記熟再來。`,`撐過 ${S.cleared} 組，手指開始記得位置了。`,`撐過 ${S.cleared} 組，已經打得出句子了！`,`撐過 ${S.cleared} 組，速成已經難不到你。`])
+    : ['三條命用完了。看看下面最常錯的字，記熟再來。','過關了！多玩幾次，手指會自己記住位置。','打得不錯，錯得不多，可以挑戰下一級了。','又快又準，這個難度難不到你。'];
+  const missList = Object.entries(S.misses).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const review = missList.length ? `<div class="review"><div class="sect-label">重溫最常錯的字</div>${missList.map(([ch]) => {
+      const code = DICT[ch];
+      return `<div class="rv"><div class="tile xs" style="--tile-ink:${L.ink}">${ch}</div><div><b>${code}</b><span>${[...code].map(k=>ROOTS[k]).join(' + ')}${NOTES[ch]?'　'+NOTES[ch]:''}</span></div></div>`;
+    }).join('')}</div>` : '';
+  const nextBtn = S.lv < 3 && cleared ? `<button class="btn" type="button" data-lv="${S.lv+1}">挑戰${LEVELS[S.lv+1].name}</button>` : '';
+  const kbTip = kbMode === 'zh' && stars >= 2 ? `<p class="small" style="text-align:center">打得順手了？試下把鍵盤轉做「英」模式，練習不看字根。</p>` : '';
+  $('#resBody').innerHTML = `
+    <div class="res-head">
+      <div class="stars">${[0,1,2].map(i=>`<span class="${i<stars?'':'dim'}">★</span>`).join('')}</div>
+      <h2>${titles[stars]}</h2>
+      <p>${L.name}${inf ? `（${timed ? S.limit/60+' 分鐘' : '不限時'}）` : ' · '+L.sub}　${lines[stars]}</p>
+      <div class="res-score">${S.score}<small>${isBest ? '新紀錄' : '分數'}</small></div>
+    </div>
+    <dl class="stats">
+      <div><dt>準確率</dt><dd>${Math.round(acc*100)}%</dd></div>
+      <div><dt>${inf ? '完成組數' : '完成字數'}</dt><dd>${inf ? S.cleared : S.done}</dd></div>
+      <div><dt>最高連擊</dt><dd>${S.maxCombo}</dd></div>
+      <div><dt>速度（字／分鐘）</dt><dd>${cpm}</dd></div>
+    </dl>
+    ${kbTip}
+    ${review}
+    <div class="res-btns">
+      ${nextBtn}
+      <button class="btn${nextBtn?' ghost':''}" type="button" data-replay="1">再玩一次</button>
+      ${inf ? '<button class="btn ghost" type="button" data-go="setup">更改設定</button>' : ''}
+      <button class="btn ghost" type="button" data-go="menu">回主頁</button>
+    </div>`;
+  S.lastStart = {lv:S.lv, opts:S.opts};
+  show('result');
+}
+
+/* =========================================================
+   事件
+   ========================================================= */
+document.addEventListener('click', e => {
+  const lv = e.target.closest('[data-lv]'); if (lv) return start(+lv.dataset.lv);
+  const rp = e.target.closest('[data-replay]'); if (rp && S) return start(S.lv, S.lv === 4 ? S.opts : undefined);
+  const les = e.target.closest('[data-lesson]'); if (les) return openLesson(+les.dataset.lesson);
+  const cd = e.target.closest('[data-cand]'); if (cd) return pickCand(cd.dataset.cand);
+  const op = e.target.closest('[data-opt]');
+  if (op){ const v = op.dataset.val; prefs.inf[op.dataset.opt] = op.dataset.opt === 'limit' ? +v : v; savePrefs(); renderSetup(); return; }
+  const go = e.target.closest('[data-go]');
+  if (go){
+    const g = go.dataset.go;
+    if (g === 'menu') show('menu');
+    else if (g === 'learn') openLearn();
+    else if (g === 'setup'){ renderSetup(); show('setup'); }
+  }
+});
+$('#setupStart').addEventListener('click', () => start(4, {...prefs.inf}));
+$('#lpBack').addEventListener('click', () => { leaveQuiz(); openLearn(); });
+$('#lpPrev').addEventListener('click', () => { if (LP.si > 0){ LP.si--; renderStep(); } });
+$('#lpNext').addEventListener('click', () => {
+  const L = LESSONS[LP.li];
+  if (LP.si < L.steps.length-1){ LP.si++; renderStep(); }
+  else { prefs.lessons[L.id] = true; savePrefs(); leaveQuiz(); beep('done'); openLearn(); }
+});
+$('#pauseBtn').addEventListener('click', () => setPause(true));
+$('#resumeBtn').addEventListener('click', () => setPause(false));
+$('#endBtn').addEventListener('click', () => { if (S && !S.over){ $('#pauseOv').hidden = true; S.paused = false; finish(false); } });
+$('#quitBtn').addEventListener('click', () => { S.over = true; cancelAnimationFrame(raf); glow(null); show('menu'); });
+$('#soundBtn').addEventListener('click', e => { prefs.sound = !prefs.sound; savePrefs(); e.currentTarget.textContent = '音效：' + (prefs.sound?'開':'關'); });
+
+let shiftAlone = false;
+document.addEventListener('keydown', e => {
+  if (e.key === 'Shift'){ shiftAlone = !e.repeat; return; }
+  shiftAlone = false;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const inGame = !$('#game').hidden && S;
+  const inLesson = !$('#learn').hidden && !$('#lessonPlayer').hidden && Q;
+  if (inGame && e.key === 'Escape'){ setPause(!S.paused); return; }
+  if (inLesson && Q.kind === 'cand' && Q.phase === 'pick' && /^[1-4]$/.test(e.key)){ pickCand(Q.cands[+e.key-1]); return; }
+  const k = e.key.length === 1 ? e.key.toUpperCase() : '';
+  if ((inGame || inLesson) && k >= 'A' && k <= 'Z'){ e.preventDefault(); route(k); }
+});
+document.addEventListener('keyup', e => { if (e.key === 'Shift' && shiftAlone) toggleKb(); shiftAlone = false; });
+document.addEventListener('visibilitychange', () => { if (document.hidden && S && !S.over && !$('#game').hidden) setPause(true); });
+
+buildRootTable(); makeKb($('#kb')); makeKb($('#learnKb'));
+setKbMode(kbMode, false);
+$('#soundBtn').textContent = '音效：' + (prefs.sound ? '開' : '關');
+refreshMenu();
+})();
+</script>
+
+</body>
+</html>
